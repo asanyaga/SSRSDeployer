@@ -1,0 +1,8 @@
+C:\Asa\Documents\virtual city\dev\Agrimanagr-Forked\Code\VirtualCity.SSRSDeployer.Console\bin\Debug\VirtualCity.SSRSDeployer.Console.exe.config
+C:\Asa\Documents\virtual city\dev\Agrimanagr-Forked\Code\VirtualCity.SSRSDeployer.Console\bin\Debug\VirtualCity.SSRSDeployer.Console.exe
+C:\Asa\Documents\virtual city\dev\Agrimanagr-Forked\Code\VirtualCity.SSRSDeployer.Console\bin\Debug\VirtualCity.SSRSDeployer.Console.pdb
+C:\Asa\Documents\virtual city\dev\Agrimanagr-Forked\Code\VirtualCity.SSRSDeployer.Console\obj\Debug\VirtualCity.SSRSDeployer.Console.csprojResolveAssemblyReference.cache
+C:\Asa\Documents\virtual city\dev\Agrimanagr-Forked\Code\VirtualCity.SSRSDeployer.Console\obj\Debug\VirtualCity.SSRSDeployer.Console.exe
+C:\Asa\Documents\virtual city\dev\Agrimanagr-Forked\Code\VirtualCity.SSRSDeployer.Console\obj\Debug\VirtualCity.SSRSDeployer.Console.pdb
+C:\Asa\Documents\virtual city\dev\Agrimanagr-Forked\Code\VirtualCity.SSRSDeployer.Console\bin\Debug\CommandLine.dll
+C:\Asa\Documents\virtual city\dev\Agrimanagr-Forked\Code\VirtualCity.SSRSDeployer.Console\bin\Debug\CommandLine.xml
