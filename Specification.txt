@@ -1,0 +1,9 @@
+Parameters:
+* Report Server Web Service url
+* Report Server Credentials
+* Path to Report Definition Files
+* Path to SQL Scripts
+* SSRS Folder
+*
+
+C:\Asa\Applications\Distributr\DistributrReportsReleases13.11.2015\DistributrReportsReleases13.11.2015\Release

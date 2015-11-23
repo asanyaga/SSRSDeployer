@@ -19,15 +19,19 @@ namespace VirtualCity.SSRSDeployer.Console
       
         static void Main(string[] args)
         {
+            List<Exception> exceptions = new List<Exception>(); ;
             try
             {
+                UploadDataSources();
                 ExecuteDatabaseScripts();
+                UploadReports();
                 System.Console.ReadLine();
             }
             catch(Exception e)
             {
-                System.Console.Write(e.StackTrace);
+                System.Console.Write(e);
             }
+            System.Console.WriteLine("DEPLOYMENT COMPLETE");
             System.Console.ReadLine();
            
         }
@@ -77,7 +81,8 @@ namespace VirtualCity.SSRSDeployer.Console
             DataSourceDefinition dataSourceDefinition = new DataSourceDefinition();
 
             dataSourceDefinition.CredentialRetrieval = CredentialRetrievalEnum.Integrated;
-            dataSourceDefinition.ConnectString = "Data Source="+ Properties.Settings.Default.SQLServerInstance + "Initial Catalog="+Properties.Settings.Default.SQLDatabaseName + "Trusted_Connection=true";
+            dataSourceDefinition.ConnectString = "Data Source="+ Properties.Settings.Default.SQLServerInstance + ";Initial Catalog="+Properties.Settings.Default.SQLDatabaseName + ";Trusted_Connection=true";
+            System.Console.WriteLine(dataSourceDefinition.ConnectString  + " CONNECTION STRING");
             dataSourceDefinition.Enabled = true;
             dataSourceDefinition.EnabledSpecified = true;
             dataSourceDefinition.Extension = "SQL";
@@ -91,22 +96,34 @@ namespace VirtualCity.SSRSDeployer.Console
             String[] dataSources = Directory.GetFiles(Properties.Settings.Default.ReportsSourceFolder, "*.rds", SearchOption.TopDirectoryOnly);
             return dataSources;
         }
+        static void UploadDataSources()
+        {
+            System.Console.WriteLine("STARING DATA SOURCE UPLOAD........");
+            DataSourceDefinition definition = ConfigureDataSourceDefinition();
+            foreach(String dataSourceFile in GetDataSourceFileNames())
+            {
+                System.Console.WriteLine("Uploading Datasource "+ dataSourceFile);
+                UploadDataSource(Path.GetFileNameWithoutExtension(dataSourceFile), definition);
+                System.Console.WriteLine("Uploaded Datasource " + dataSourceFile);
+            }
+            System.Console.WriteLine("COMPLETED DATA SOURCE UPLOAD........");
+        }
         static void UploadDataSource(String dataSourceName,DataSourceDefinition definition)
         {
             ReportingService2010 rs = new ReportingService2010();
             rs.Url = Properties.Settings.Default.SSRSUrl;
             rs.Credentials = System.Net.CredentialCache.DefaultCredentials;
-            rs.CreateDataSource(dataSourceName, Properties.Settings.Default.SSRSFolder, false, definition, null);
+            rs.CreateDataSource(dataSourceName, Properties.Settings.Default.SSRSFolder, true, definition, null);
 
         }
-        static void UploadReport()
+        static void UploadReports()
         {
             ReportService2010.ReportingService2010 rs = new ReportService2010.ReportingService2010();
             string serviceUrl = Properties.Settings.Default.SSRSUrl;
             rs.Credentials = System.Net.CredentialCache.DefaultCredentials;
             rs.Url = serviceUrl;
             string strItemType = "Report";
-            string strName = "Sales By Product";
+            string strName;
             Byte[] definition = null;
             ReportService2010.Warning[] warnings = null;
 
@@ -116,8 +133,8 @@ namespace VirtualCity.SSRSDeployer.Console
             {
                 try
                 {
-                    System.Console.WriteLine("Reading the report file");
-
+                    System.Console.WriteLine("Reading the report file" + reportFile);
+                   
                     FileStream stream = File.OpenRead(reportFile);
                     definition = new Byte[stream.Length];
                     stream.Read(definition, 0, (int)stream.Length);
@@ -133,7 +150,8 @@ namespace VirtualCity.SSRSDeployer.Console
                 try
                 {
                     string parent = Properties.Settings.Default.SSRSFolder;
-                    System.Console.WriteLine("Uploading the report file");
+                    strName = Path.GetFileNameWithoutExtension(reportFile);
+                    System.Console.WriteLine("Uploading the report " + strName);
                     ReportService2010.CatalogItem report = rs.CreateCatalogItem(strItemType, strName, parent, true, definition, null, out warnings);
 
                     if (warnings != null)
@@ -147,7 +165,6 @@ namespace VirtualCity.SSRSDeployer.Console
                     else
                         System.Console.WriteLine("Report: {0} created successfully " +
                                           " with no warnings", strName);
-                    System.Console.ReadLine();
                 }
                 catch (SoapException e)
                 {
